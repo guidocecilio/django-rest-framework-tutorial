@@ -49,39 +49,7 @@ class SnippetViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-# class UserList(generics.ListCreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-
-# class UserDetail(generics.RetrieveAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-
-# class SnippetList(generics.ListCreateAPIView):
-#     queryset = Snippet.objects.all()
-#     serializer_class = SnippetSerializer
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-#     def perform_create(self, serializer):
-#         serializer.save(owner=self.request.user)
-
-
-# class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Snippet.objects.all()
-#     serializer_class = SnippetSerializer
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
-
-
-# class SnippetHighlight(generics.GenericAPIView):
-#     queryset = Snippet.objects.all()
-#     renderer_classes = (renderers.StaticHTMLRenderer,)
-
-#     def get(self, request, *args, **kwargs):
-#         snippet = self.get_object()
-#         return Response(snippet.highlighted)
-
+# Stage 1
 # from rest_framework import status
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
@@ -132,6 +100,8 @@ class SnippetViewSet(viewsets.ModelViewSet):
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+
+# Stage 2
 # from rest_framework import status
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
@@ -187,6 +157,8 @@ class SnippetViewSet(viewsets.ModelViewSet):
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+
+# Stage 3
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 # from rest_framework import mixins
@@ -220,5 +192,96 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
 #     def delete(self, request, *args, **kwargs):
 #         return self.destroy(request, *args, **kwargs)
+
+
+
+# Other aproaches during the tutorial
+# class UserList(generics.ListCreateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+
+
+# class UserDetail(generics.RetrieveAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+
+
+# class SnippetList(generics.ListCreateAPIView):
+#     queryset = Snippet.objects.all()
+#     serializer_class = SnippetSerializer
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+#     def perform_create(self, serializer):
+#         serializer.save(owner=self.request.user)
+
+
+# class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Snippet.objects.all()
+#     serializer_class = SnippetSerializer
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+
+
+# class SnippetHighlight(generics.GenericAPIView):
+#     queryset = Snippet.objects.all()
+#     renderer_classes = (renderers.StaticHTMLRenderer,)
+
+#     def get(self, request, *args, **kwargs):
+#         snippet = self.get_object()
+#         return Response(snippet.highlighted)
+
+
+
+
+# Binding ViewSets to URLs explicitly
+# from snippets.views import SnippetViewSet, UserViewSet, api_root
+# from rest_framework import renderers
+#
+# snippet_list = SnippetViewSet.as_view({
+#     'get': 'list',
+#     'post': 'create'
+# })
+# snippet_detail = SnippetViewSet.as_view({
+#     'get': 'retrieve',
+#     'put': 'update',
+#     'patch': 'partial_update',
+#     'delete': 'destroy'
+# })
+# snippet_highlight = SnippetViewSet.as_view({
+#     'get': 'highlight'
+# }, renderer_classes=[renderers.StaticHTMLRenderer])
+# user_list = UserViewSet.as_view({
+#     'get': 'list'
+# })
+# user_detail = UserViewSet.as_view({
+#     'get': 'retrieve'
+# })
+
+# urls.py
+# urlpatterns = format_suffix_patterns([
+#     url(r'^$', api_root),
+#     url(r'^snippets/$', snippet_list, name='snippet-list'),
+#     url(r'^snippets/(?P<pk>[0-9]+)/$', snippet_detail, name='snippet-detail'),
+#     url(r'^snippets/(?P<pk>[0-9]+)/highlight/$', snippet_highlight, name='snippet-highlight'),
+#     url(r'^users/$', user_list, name='user-list'),
+#     url(r'^users/(?P<pk>[0-9]+)/$', user_detail, name='user-detail')
+# ])
+
+
+# Using Router
+# from django.conf.urls import url, include
+# from snippets import views
+# from rest_framework.routers import DefaultRouter
+#
+# # Create a router and register our viewsets with it.
+# router = DefaultRouter()
+# router.register(r'snippets', views.SnippetViewSet)
+# router.register(r'users', views.UserViewSet)
+#
+# # The API URLs are now determined automatically by the router.
+# # Additionally, we include the login URLs for the browsable API.
+# urlpatterns = [
+#     url(r'^', include(router.urls)),
+#     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+# ]
 
 
