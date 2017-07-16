@@ -15,6 +15,13 @@ $ source .env/bin/activate
 (.env)$ python tutorial/manage.py makemigrations snippets
 (.env)$ python tutorial/manage.py migrate
 ```
+
+To create a few users, to use for testing the API use the createsuperuser command
+```shell
+(.env)$ python manage.py createsuperuser
+```
+
+Running the server
 ```shell
 (.env)$ python tutorial/manage.py runserver
 ```
